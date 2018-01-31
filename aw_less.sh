@@ -30,11 +30,15 @@ function create_image {
     ### Get stopped instances name and cteate image Assign property Name=$Name_and_data
     ## loop for each element from list
     AWS_NAMES_STOPED=$(awless list instances --filter state=stopped,type=t2.micro,id=$AWS_ID_STOPED | awk '{print $6}'| tail -n +3)
-    SUM=$AWS_NAMES_STOPED$(date +%Y-%m-%d)
-    yes | awless create image instance=$AWS_ID_STOPED name=$SUM
-    exit 0
-  #  IMAGE_ID=$(awless list images  --filter name="$AWS_NAMES_STOPED" | awk '{print $2}'| tail -n +3)
-  #  awless create tag key=DATE resource=$IMAGE_ID value=$DATE
+      SUM=$AWS_NAMES_STOPED$(date +%Y-%m-%d)
+    yes | awless create image instance=$AWS_ID_STOPED name=$SUM > raw.txt 2>&1
+    IMAGE_ID=$(cat raw.txt | grep "create image ("| cut -d '(' -f 2 | cut -d ')' -f 1 )
+
+      DATE=$(date +%Y:%m:%d)
+      EPOC=$(date +%s)
+    #IMAGE_ID=$(awless list images  --filter name="$AWS_NAMES_STOPED" | awk '{print $2}'| tail -n +3)
+    yes | awless create tag key=DATE resource=$IMAGE_ID value=$DATE
+    yes | awless create tag key=EPOC resource=$IMAGE_ID value=$EPOC
   done
   #statements
 }
