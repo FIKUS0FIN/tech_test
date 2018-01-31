@@ -38,11 +38,27 @@ function create_image {
     #IMAGE_ID=$(awless list images  --filter name="$AWS_NAMES_STOPED" | awk '{print $2}'| tail -n +3)
     yes | awless create tag key=DATE resource=$IMAGE_ID value=$DATE
     yes | awless create tag key=EPOC resource=$IMAGE_ID value=$EPOC
+    awless delete instance ids=$instance_id
   done
   #statements
 }
-list_instance
-create_image
+function imges_rotation {
+  ALL_IMAGES_IDS=$(awless list images | grep ami |   awk '{print $2}')
+  for image_id in $ALL_IMAGES_IDS ; do
+    create_time="0"
+    while [ "$create_time" == "" ] ; do
+      awless show $image_id | awk '{print $4}' | grep EPOC | cut -d '=' -f 2 > raw
+      create_time=$(cat raw)
+    done
+    curent_epoc_time=$(date +%s)
+    diff=$(expr $create_time - $curent_epoc_time )
+    echo "$diff"
+  done
+  #statements
+}
 
+#list_instance
+#create_image
+imges_rotation
 
 exit 0
