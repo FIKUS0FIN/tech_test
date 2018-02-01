@@ -88,8 +88,8 @@ Write a Shell/Python script using AWS SDK that will do the following:
 
 - [x] Determinate the instance state using it’s DNS name (need at least 2 verifications, TCP and HTTP).
     - [x] Wrote bash script with will get DNS name or IP and will check 22 tcp port and HTTP port
-    - [ ]
+    - [x]
 - [x] Create an AMI of the stopped EC2 instance, add descriptive tag based on the EC2 name along with the current date.
 - [x] Terminate stopped EC2 after AMI creation.
-- [ ] Clean up AMIs older than 7 days for the specific availability zone, where terminated instance was running.
+- [x] Clean up AMIs older than 7 days for the specific availability zone, where terminated instance was running.
 - [x] Print all instances in fine-grained output, INCLUDING terminated one, with highlighting their current state.
